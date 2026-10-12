@@ -1,0 +1,47 @@
+# SSH into the remote Mac
+scp -r -O "/Volumes/ORIGIN/wallpaper2025.png" pointblank@enteriphere:/Users/Shared
+ssh admin_user@remote_machine_ip <<EOF
+  # Switch to the 'students' user
+  sudo -u students bash <<EOT
+    # Set the wallpaper to a PNG file for both desktops (replace with the correct file path)
+    osascript -e "tell application \"System Events\" to activate"
+    osascript -e "tell application \"System Events\" to set picture of desktop 1 to \"/Users/Shared/wallpaper2025.png\""
+    osascript -e "tell application \"System Events\" to set picture of desktop 2 to \"/Users/Shared/wallpaper2025.png\""
+    
+    # Set the "Fit to all spaces" option for the wallpaper to ON (Ventura might not directly expose this via osascript)
+    osascript -e "tell application \"System Preferences\" to reveal anchor \"Desktop\" of pane id \"com.apple.preference.desktopscreeneffect\""
+    osascript -e "tell application \"System Events\" to tell process \"System Preferences\" to set value of checkbox \"Displays have separate Spaces\" of tab group 1 of window \"Desktop & Screen Saver\" to true"
+    
+    # Enable dark mode
+    defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
+    
+    # Delete Logic Pro X.app from Applications
+    rm -rf /Applications/Logic\ Pro\ X.app
+    
+    # Clear the Dock of all apps (this will remove all currently added apps from the Dock)
+    defaults write com.apple.dock persistent-apps -array
+    killall Dock
+
+    # Add certain apps to the Dock (replace bundle identifiers with the actual apps)
+    osascript -e "tell application \"System Events\" to make new dock item with properties {bundle identifier:\"com.apple.finder\"}"
+    osascript -e "tell application \"System Events\" to make new dock item with properties {bundle identifier:\"com.apple.Terminal\"}"
+    osascript -e "tell application \"System Events\" to make new dock item with properties {bundle identifier:\"com.apple.Safari\"}"
+
+    # Set the screensaver to "Message"
+    osascript -e "tell application \"System Preferences\" to reveal anchor \"ScreenSaver\" of pane id \"com.apple.preference.desktopscreeneffect\""
+    osascript -e "tell application \"System Events\" to tell process \"System Preferences\" to set value of pop-up button \"Screen Saver\" of tab group 1 of window \"Desktop & Screen Saver\" to \"Message\""
+    
+    # Restart the Dock to apply changes
+    killall Dock
+  EOT
+
+  # Exit the SSH session
+  exit
+EOF
+
+open -a "Logic Pro"
+open -a "Ableton Live 12 Suite"
+open -a "Komplete Kontrol"
+open -a "Reaktor 6"
+open -a "zoom.us"
+open -a "OBS"
