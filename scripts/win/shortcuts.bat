@@ -1,7 +1,13 @@
+:: 
+::
+::Script to create shortcuts for apps installed with install.bat
+::
+::
+
 @echo off
 setlocal enabledelayedexpansion
 
-:: --- ADMIN PRIVILEGES CHECK ---
+:: Check if the script is running with administrative privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] This script must be run as an Administrator.
@@ -13,7 +19,7 @@ if %errorlevel% neq 0 (
 echo Creating shortcuts... Please wait.
 echo.
 
-:: --- CONFIGURATION ---
+:: config
 set "START_MENU=%ProgramData%\Microsoft\Windows\Start Menu\Programs"
 
 :: Shortcut 1 Details
@@ -26,7 +32,7 @@ set "APP2_NAME=Native Access"
 set "APP2_EXE=C:\Program Files\Native Instruments\Native Access\Native Access.exe"
 set "APP2_DIR=C:\Program Files\Native Instruments\Native Access"
 
-:: --- STEP 1: CREATE AUDACITY SHORTCUT ---
+:: Create APP1 Shortcut
 if exist "%APP1_EXE%" (
     echo Set oWS = WScript.CreateObject^("WScript.Shell"^) > "%TEMP%\shortcut.vbs"
     echo sLinkFile = "%START_MENU%\%APP1_NAME%.lnk" >> "%TEMP%\shortcut.vbs"
@@ -42,7 +48,7 @@ if exist "%APP1_EXE%" (
     echo [ERROR] Could not find Audacity4.exe at the specified path.
 )
 
-:: --- STEP 2: CREATE NATIVE ACCESS SHORTCUT ---
+:: Create APP2 Shortcut
 if exist "%APP2_EXE%" (
     echo Set oWS = WScript.CreateObject^("WScript.Shell"^) > "%TEMP%\shortcut.vbs"
     echo sLinkFile = "%START_MENU%\%APP2_NAME%.lnk" >> "%TEMP%\shortcut.vbs"

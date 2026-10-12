@@ -1,3 +1,5 @@
+:: Creates a system restore point. Double click to run. Requires administrator privileges.
+
 @echo off
 :: Set variables for software paths and restore point name
 set "restorePointName=MaintenanceSept2026"
